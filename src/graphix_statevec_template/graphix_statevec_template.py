@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
     from graphix.sim.data import Data
 
+import cuquantum.bindings.custatevec as cuvec
 
 class Statevec(DenseState):
     """Statevector object.
@@ -46,7 +47,14 @@ class Statevec(DenseState):
         nqubit : int | None, optional
             Number of qubits to prepare. If ``None`` (default), it's inferred from ``data``.
         """
-        sv_graphix = SVLegacy(data, nqubit)  # noqa: F841
+        sv_handle = cuvec.create()
+        cuvec.state_vector_initialization(
+            handle=sv_handle,
+            sv=...,
+            sv_data_type=...,
+            n_index_bits=nqubit,
+            sv_type=cuvec.StatevectorType.ZERO
+        )
 
         # TODO
         # For simplicity, the __init__ method in this template re-uses the constructor of the existing statevector in Graphix.
